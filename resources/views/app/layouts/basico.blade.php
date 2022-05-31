@@ -9,5 +9,6 @@
     <body>
         @include('app.layouts._partials.topo')
         @yield('conteudo')
+        <script src="{{ asset('js/main.js') }}" ></script>
     </body>
 </html>

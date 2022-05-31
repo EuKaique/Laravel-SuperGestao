@@ -204,3 +204,6 @@ button:hover {
 .pagination ul {
     list-style-type: none;
 }
+svg, path{
+    display: none;
+}

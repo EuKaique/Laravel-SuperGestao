@@ -9,7 +9,7 @@
         <div class="titulo-pagina-2">
             <p>Fornecedor</p>
         </div>
-
+        {{ $msg ?? '' }}
         <div class="menu">
             <ul>
                 <li><a href="{{ route('app.fornecedor.adicionar') }}">Novo</a></li>
