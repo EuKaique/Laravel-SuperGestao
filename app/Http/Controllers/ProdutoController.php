@@ -40,6 +40,24 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
+        $regras = [
+            "nome"       => "required|min:3|max:40",
+            "descricao"  => "required|min:10|max:200",
+            "peso"       => "required|integer",
+            "unidade_id" => "exists:unidades,id"
+        ];
+
+        $feedback = [
+            "required"          => "O campo :attribute é obrigatório",
+            "nome.min"          => "O nome deve ter no mínimo 3 caracteres",
+            "nome.max"          => "O nome deve ter no máximo 40 caracteres",
+            "descricao.min"     => "A descrição deve ter no mínimo 10 caracteres",
+            "descricao.max"     => "A descrição deve ter no máximo 200 caracteres",
+            "unidade_id.exists" => "A unidade de medida não existe"
+        ];
+
+        $request->validate($regras, $feedback);
+
         Produto::create($request->all());
         return redirect()->route('produto.index');
     }
@@ -52,7 +70,7 @@ class ProdutoController extends Controller
      */
     public function show(Produto $produto)
     {
-        //
+        return view('app.produto.show', ['produto' => $produto]);
     }
 
     /**
@@ -63,7 +81,9 @@ class ProdutoController extends Controller
      */
     public function edit(Produto $produto)
     {
-        //
+        $unidades = Unidade::all();
+
+        return view('app.produto.edit', ['produto' => $produto, 'unidades' => $unidades]);
     }
 
     /**
@@ -75,7 +95,9 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, Produto $produto)
     {
-        //
+        $produto->update($request->all());
+
+        return view('app.produto.show', ['produto' => $produto]);
     }
 
     /**
@@ -86,6 +108,8 @@ class ProdutoController extends Controller
      */
     public function destroy(Produto $produto)
     {
-        //
+        $produto->delete();
+
+        return redirect()->route('produto.index');
     }
 }
