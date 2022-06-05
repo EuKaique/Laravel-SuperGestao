@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produto;
 use App\Models\ProdutoDetalhe;
 use App\Models\Unidade;
+use App\Models\Fornecedor;
 use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
@@ -40,8 +41,9 @@ class ProdutoController extends Controller
     public function create()
     {
         $unidades = Unidade::all();
+        $fornecedores = Fornecedor::all();
 
-        return view('app.produto.create', ['unidades' => $unidades]);
+        return view('app.produto.create', ['unidades' => $unidades, 'fornecedores' => $fornecedores]);
     }
 
     /**
@@ -56,16 +58,18 @@ class ProdutoController extends Controller
             "nome"       => "required|min:3|max:40",
             "descricao"  => "required|min:10|max:200",
             "peso"       => "required|integer",
-            "unidade_id" => "exists:unidades,id"
+            "unidade_id" => "exists:unidades,id",
+            "fornecedor_id" => "exists:fornecedores,id"
         ];
 
         $feedback = [
-            "required"          => "O campo :attribute é obrigatório",
-            "nome.min"          => "O nome deve ter no mínimo 3 caracteres",
-            "nome.max"          => "O nome deve ter no máximo 40 caracteres",
-            "descricao.min"     => "A descrição deve ter no mínimo 10 caracteres",
-            "descricao.max"     => "A descrição deve ter no máximo 200 caracteres",
-            "unidade_id.exists" => "A unidade de medida não existe"
+            "required"             => "O campo :attribute é obrigatório",
+            "nome.min"             => "O nome deve ter no mínimo 3 caracteres",
+            "nome.max"             => "O nome deve ter no máximo 40 caracteres",
+            "descricao.min"        => "A descrição deve ter no mínimo 10 caracteres",
+            "descricao.max"        => "A descrição deve ter no máximo 200 caracteres",
+            "unidade_id.exists"    => "A unidade de medida não existe",
+            "fornecedor_id.exists" => "O fornecedor não existe"
         ];
 
         $request->validate($regras, $feedback);
@@ -93,9 +97,10 @@ class ProdutoController extends Controller
      */
     public function edit(Produto $produto)
     {
-        $unidades = Unidade::all();
+        $unidades     = Unidade::all();
+        $fornecedores = Fornecedor::all();
 
-        return view('app.produto.edit', ['produto' => $produto, 'unidades' => $unidades]);
+        return view('app.produto.edit', ['produto' => $produto, 'unidades' => $unidades, 'fornecedores' => $fornecedores]);
     }
 
     /**
